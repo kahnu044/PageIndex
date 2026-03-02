@@ -25,11 +25,11 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openai").lower()
 PROVIDER_DEFAULTS = {
     "openai": {
         "default_model": "gpt-4o-2024-11-20",
-        "env_keys": ["OPENAI_API_KEY", "CHATGPT_API_KEY"],
+        "env_keys": ["LLM_API_KEY"],
     },
     "anthropic": {
         "default_model": "claude-sonnet-4-20250514",
-        "env_keys": ["ANTHROPIC_API_KEY"],
+        "env_keys": ["LLM_API_KEY"],
     },
 }
 
@@ -65,11 +65,6 @@ def _get_default_model(provider=None):
     if env_model:
         return env_model
     return PROVIDER_DEFAULTS.get(provider, PROVIDER_DEFAULTS["openai"])["default_model"]
-
-
-# Backward compatibility
-CHATGPT_API_KEY = os.getenv("CHATGPT_API_KEY") or os.getenv("OPENAI_API_KEY")
-
 
 def _get_tokenizer(model=None):
     """Get a tokenizer, falling back to cl100k_base for non-OpenAI models."""

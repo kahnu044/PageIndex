@@ -2,6 +2,7 @@ import tiktoken
 import openai
 import logging
 import os
+import re
 from datetime import datetime
 import time
 import json
@@ -17,26 +18,90 @@ import yaml
 from pathlib import Path
 from types import SimpleNamespace as config
 
-CHATGPT_API_KEY = os.getenv("CHATGPT_API_KEY")
+
+# ---- LLM Provider Configuration ----
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openai").lower()
+
+PROVIDER_DEFAULTS = {
+    "openai": {
+        "default_model": "gpt-4o-2024-11-20",
+        "env_keys": ["OPENAI_API_KEY", "CHATGPT_API_KEY"],
+    },
+    "anthropic": {
+        "default_model": "claude-sonnet-4-20250514",
+        "env_keys": ["ANTHROPIC_API_KEY"],
+    },
+}
+
+if LLM_PROVIDER not in PROVIDER_DEFAULTS:
+    logging.warning(
+        f"Unknown LLM_PROVIDER '{LLM_PROVIDER}'. "
+        f"Supported: {list(PROVIDER_DEFAULTS.keys())}. Falling back to 'openai'."
+    )
+    LLM_PROVIDER = "openai"
+
+
+def _get_api_key(provider=None):
+    """Get the API key for the specified provider."""
+    provider = provider or LLM_PROVIDER
+    generic_key = os.getenv("LLM_API_KEY")
+    if generic_key:
+        return generic_key
+    provider_config = PROVIDER_DEFAULTS.get(provider, PROVIDER_DEFAULTS["openai"])
+    for env_key in provider_config["env_keys"]:
+        key = os.getenv(env_key)
+        if key:
+            return key
+    raise ValueError(
+        f"No API key found for provider '{provider}'. "
+        f"Set one of: {', '.join(provider_config['env_keys'])} or LLM_API_KEY in your .env file."
+    )
+
+
+def _get_default_model(provider=None):
+    """Get the default model for the specified provider."""
+    provider = provider or LLM_PROVIDER
+    env_model = os.getenv("LLM_MODEL")
+    if env_model:
+        return env_model
+    return PROVIDER_DEFAULTS.get(provider, PROVIDER_DEFAULTS["openai"])["default_model"]
+
+
+# Backward compatibility
+CHATGPT_API_KEY = os.getenv("CHATGPT_API_KEY") or os.getenv("OPENAI_API_KEY")
+
+
+def _get_tokenizer(model=None):
+    """Get a tokenizer, falling back to cl100k_base for non-OpenAI models."""
+    if model is None:
+        return tiktoken.get_encoding("cl100k_base")
+    try:
+        return tiktoken.encoding_for_model(model)
+    except (KeyError, ValueError):
+        return tiktoken.get_encoding("cl100k_base")
+
 
 def count_tokens(text, model=None):
     if not text:
         return 0
-    enc = tiktoken.encoding_for_model(model)
+    enc = _get_tokenizer(model)
     tokens = enc.encode(text)
     return len(tokens)
 
-def ChatGPT_API_with_finish_reason(model, prompt, api_key=CHATGPT_API_KEY, chat_history=None):
+
+# ---- OpenAI Implementations ----
+
+def _openai_api_with_finish_reason(model, prompt, api_key, chat_history=None):
     max_retries = 10
     client = openai.OpenAI(api_key=api_key)
     for i in range(max_retries):
         try:
             if chat_history:
-                messages = chat_history
+                messages = list(chat_history)
                 messages.append({"role": "user", "content": prompt})
             else:
                 messages = [{"role": "user", "content": prompt}]
-            
+
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
@@ -51,42 +116,40 @@ def ChatGPT_API_with_finish_reason(model, prompt, api_key=CHATGPT_API_KEY, chat_
             print('************* Retrying *************')
             logging.error(f"Error: {e}")
             if i < max_retries - 1:
-                time.sleep(1)  # Wait for 1秒 before retrying
+                time.sleep(1)
             else:
                 logging.error('Max retries reached for prompt: ' + prompt)
-                return "Error"
+                return "Error", "error"
 
 
-
-def ChatGPT_API(model, prompt, api_key=CHATGPT_API_KEY, chat_history=None):
+def _openai_api(model, prompt, api_key, chat_history=None):
     max_retries = 10
     client = openai.OpenAI(api_key=api_key)
     for i in range(max_retries):
         try:
             if chat_history:
-                messages = chat_history
+                messages = list(chat_history)
                 messages.append({"role": "user", "content": prompt})
             else:
                 messages = [{"role": "user", "content": prompt}]
-            
+
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
                 temperature=0,
             )
-   
             return response.choices[0].message.content
         except Exception as e:
             print('************* Retrying *************')
             logging.error(f"Error: {e}")
             if i < max_retries - 1:
-                time.sleep(1)  # Wait for 1秒 before retrying
+                time.sleep(1)
             else:
                 logging.error('Max retries reached for prompt: ' + prompt)
                 return "Error"
-            
 
-async def ChatGPT_API_async(model, prompt, api_key=CHATGPT_API_KEY):
+
+async def _openai_api_async(model, prompt, api_key):
     max_retries = 10
     messages = [{"role": "user", "content": prompt}]
     for i in range(max_retries):
@@ -102,12 +165,142 @@ async def ChatGPT_API_async(model, prompt, api_key=CHATGPT_API_KEY):
             print('************* Retrying *************')
             logging.error(f"Error: {e}")
             if i < max_retries - 1:
-                await asyncio.sleep(1)  # Wait for 1s before retrying
+                await asyncio.sleep(1)
             else:
                 logging.error('Max retries reached for prompt: ' + prompt)
-                return "Error"  
-            
-            
+                return "Error"
+
+
+# ---- Anthropic Implementations ----
+
+def _anthropic_api_with_finish_reason(model, prompt, api_key, chat_history=None):
+    try:
+        import anthropic
+    except ImportError:
+        raise ImportError(
+            "anthropic package is required when LLM_PROVIDER=anthropic. "
+            "Install with: pip install anthropic"
+        )
+    max_retries = 10
+    client = anthropic.Anthropic(api_key=api_key)
+    for i in range(max_retries):
+        try:
+            if chat_history:
+                messages = list(chat_history)
+                messages.append({"role": "user", "content": prompt})
+            else:
+                messages = [{"role": "user", "content": prompt}]
+
+            response = client.messages.create(
+                model=model,
+                max_tokens=8192,
+                messages=messages,
+                temperature=0,
+            )
+            content = response.content[0].text
+            if response.stop_reason == "max_tokens":
+                return content, "max_output_reached"
+            else:
+                return content, "finished"
+
+        except Exception as e:
+            print('************* Retrying *************')
+            logging.error(f"Error: {e}")
+            if i < max_retries - 1:
+                time.sleep(1)
+            else:
+                logging.error('Max retries reached for prompt: ' + prompt)
+                return "Error", "error"
+
+
+def _anthropic_api(model, prompt, api_key, chat_history=None):
+    try:
+        import anthropic
+    except ImportError:
+        raise ImportError(
+            "anthropic package is required when LLM_PROVIDER=anthropic. "
+            "Install with: pip install anthropic"
+        )
+    max_retries = 10
+    client = anthropic.Anthropic(api_key=api_key)
+    for i in range(max_retries):
+        try:
+            if chat_history:
+                messages = list(chat_history)
+                messages.append({"role": "user", "content": prompt})
+            else:
+                messages = [{"role": "user", "content": prompt}]
+
+            response = client.messages.create(
+                model=model,
+                max_tokens=8192,
+                messages=messages,
+                temperature=0,
+            )
+            return response.content[0].text
+        except Exception as e:
+            print('************* Retrying *************')
+            logging.error(f"Error: {e}")
+            if i < max_retries - 1:
+                time.sleep(1)
+            else:
+                logging.error('Max retries reached for prompt: ' + prompt)
+                return "Error"
+
+
+async def _anthropic_api_async(model, prompt, api_key):
+    try:
+        import anthropic
+    except ImportError:
+        raise ImportError(
+            "anthropic package is required when LLM_PROVIDER=anthropic. "
+            "Install with: pip install anthropic"
+        )
+    max_retries = 10
+    messages = [{"role": "user", "content": prompt}]
+    for i in range(max_retries):
+        try:
+            async with anthropic.AsyncAnthropic(api_key=api_key) as client:
+                response = await client.messages.create(
+                    model=model,
+                    max_tokens=8192,
+                    messages=messages,
+                    temperature=0,
+                )
+                return response.content[0].text
+        except Exception as e:
+            print('************* Retrying *************')
+            logging.error(f"Error: {e}")
+            if i < max_retries - 1:
+                await asyncio.sleep(1)
+            else:
+                logging.error('Max retries reached for prompt: ' + prompt)
+                return "Error"
+
+
+# ---- Public API (backward-compatible names) ----
+
+def ChatGPT_API_with_finish_reason(model, prompt, api_key=None, chat_history=None):
+    api_key = api_key or _get_api_key()
+    if LLM_PROVIDER == "anthropic":
+        return _anthropic_api_with_finish_reason(model, prompt, api_key, chat_history)
+    return _openai_api_with_finish_reason(model, prompt, api_key, chat_history)
+
+
+def ChatGPT_API(model, prompt, api_key=None, chat_history=None):
+    api_key = api_key or _get_api_key()
+    if LLM_PROVIDER == "anthropic":
+        return _anthropic_api(model, prompt, api_key, chat_history)
+    return _openai_api(model, prompt, api_key, chat_history)
+
+
+async def ChatGPT_API_async(model, prompt, api_key=None):
+    api_key = api_key or _get_api_key()
+    if LLM_PROVIDER == "anthropic":
+        return await _anthropic_api_async(model, prompt, api_key)
+    return await _openai_api_async(model, prompt, api_key)
+
+
 def get_json_content(response):
     start_idx = response.find("```json")
     if start_idx != -1:
@@ -410,8 +603,10 @@ def add_preface_if_needed(data):
 
 
 
-def get_page_tokens(pdf_path, model="gpt-4o-2024-11-20", pdf_parser="PyPDF2"):
-    enc = tiktoken.encoding_for_model(model)
+def get_page_tokens(pdf_path, model=None, pdf_parser="PyPDF2"):
+    if model is None:
+        model = _get_default_model()
+    enc = _get_tokenizer(model)
     if pdf_parser == "PyPDF2":
         pdf_reader = PyPDF2.PdfReader(pdf_path)
         page_list = []
@@ -683,6 +878,14 @@ class ConfigLoader:
         if default_path is None:
             default_path = Path(__file__).parent / "config.yaml"
         self._default_dict = self._load_yaml(default_path)
+
+        # Override model from .env if set
+        env_model = os.getenv("LLM_MODEL")
+        if env_model:
+            self._default_dict["model"] = env_model
+        elif LLM_PROVIDER != "openai":
+            # Use provider-appropriate default model instead of config.yaml's OpenAI model
+            self._default_dict["model"] = _get_default_model()
 
     @staticmethod
     def _load_yaml(path):

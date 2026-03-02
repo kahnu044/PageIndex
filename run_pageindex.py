@@ -10,7 +10,7 @@ if __name__ == "__main__":
     parser.add_argument('--pdf_path', type=str, help='Path to the PDF file')
     parser.add_argument('--md_path', type=str, help='Path to the Markdown file')
 
-    parser.add_argument('--model', type=str, default='gpt-4o-2024-11-20', help='Model to use')
+    parser.add_argument('--model', type=str, default=None, help='Model to use')
 
     parser.add_argument('--toc-check-pages', type=int, default=20, 
                       help='Number of pages to check for table of contents (PDF only)')
@@ -51,17 +51,23 @@ if __name__ == "__main__":
             raise ValueError(f"PDF file not found: {args.pdf_path}")
             
         # Process PDF file
-        # Configure options
-        opt = config(
-            model=args.model,
-            toc_check_page_num=args.toc_check_pages,
-            max_page_num_each_node=args.max_pages_per_node,
-            max_token_num_each_node=args.max_tokens_per_node,
-            if_add_node_id=args.if_add_node_id,
-            if_add_node_summary=args.if_add_node_summary,
-            if_add_doc_description=args.if_add_doc_description,
-            if_add_node_text=args.if_add_node_text
-        )
+        # Configure options using ConfigLoader for provider-aware defaults
+        from pageindex.utils import ConfigLoader
+        config_loader = ConfigLoader()
+
+        user_opt = {
+            'toc_check_page_num': args.toc_check_pages,
+            'max_page_num_each_node': args.max_pages_per_node,
+            'max_token_num_each_node': args.max_tokens_per_node,
+            'if_add_node_id': args.if_add_node_id,
+            'if_add_node_summary': args.if_add_node_summary,
+            'if_add_doc_description': args.if_add_doc_description,
+            'if_add_node_text': args.if_add_node_text,
+        }
+        if args.model:
+            user_opt['model'] = args.model
+
+        opt = config_loader.load(user_opt)
 
         # Process the PDF
         toc_with_page_number = page_index_main(args.pdf_path, opt)
@@ -97,12 +103,13 @@ if __name__ == "__main__":
         
         # Create options dict with user args
         user_opt = {
-            'model': args.model,
             'if_add_node_summary': args.if_add_node_summary,
             'if_add_doc_description': args.if_add_doc_description,
             'if_add_node_text': args.if_add_node_text,
             'if_add_node_id': args.if_add_node_id
         }
+        if args.model:
+            user_opt['model'] = args.model
         
         # Load config with defaults from config.yaml
         opt = config_loader.load(user_opt)

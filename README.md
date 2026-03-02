@@ -170,10 +170,11 @@ pip install -r requirements.txt
 
 ## 3. Set your OpenAI API key
 
-Create a `.env` file in the root directory and add your API key:
+Copy  `.env.example` and create `.env` file in the root directory and add your LLM_PROVIDER and LLM_API_KEY:
 
 ```bash
-CHATGPT_API_KEY=your_openai_key_here
+LLM_PROVIDER=anthropic
+LLM_API_KEY="sk-ant-api07xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 ## 4. Run PageIndex on your PDF
@@ -204,7 +205,7 @@ You can customize the processing with additional optional arguments:
 We also provide markdown support for PageIndex. You can use the `-md_path` flag to generate a tree structure for a markdown file.
 
 ```bash
-python3 run_pageindex.py --md_path /path/to/your/document.md
+python3.12 run_pageindex.py --md_path /path/to/your/document.md
 ```
 
 > Note: in this function, we use "#" to determine node heading and their levels. For example, "##" is level 2, "###" is level 3, etc. Make sure your markdown file is formatted correctly. If your Markdown file was converted from a PDF or HTML, we don't recommend using this function, since most existing conversion tools cannot preserve the original hierarchy. Instead, use our [PageIndex OCR](https://pageindex.ai/blog/ocr), which is designed to preserve the original hierarchy, to convert the PDF to a markdown file and then use this function.

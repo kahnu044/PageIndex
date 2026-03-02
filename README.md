@@ -141,13 +141,34 @@ You can generate the PageIndex tree structure with this open-source repo, or use
 
 You can follow these steps to generate a PageIndex tree from a PDF document.
 
-### 1. Install dependencies
+## 1. Create and activate a virtual environment
+
+### On macOS / Linux
 
 ```bash
-pip3 install --upgrade -r requirements.txt
+python3.12 -m venv venv
+source venv/bin/activate
 ```
 
-### 2. Set your OpenAI API key
+### On Windows
+
+```bash
+python3.12 -m venv venv
+venv\Scripts\activate
+```
+
+## 2. Install dependencies
+
+Once the virtual environment is activated:
+
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+---
+
+## 3. Set your OpenAI API key
 
 Create a `.env` file in the root directory and add your API key:
 
@@ -155,10 +176,10 @@ Create a `.env` file in the root directory and add your API key:
 CHATGPT_API_KEY=your_openai_key_here
 ```
 
-### 3. Run PageIndex on your PDF
+## 4. Run PageIndex on your PDF
 
 ```bash
-python3 run_pageindex.py --pdf_path /path/to/your/document.pdf
+python3.12 run_pageindex.py --pdf_path /path/to/your/document.pdf
 ```
 
 <details>

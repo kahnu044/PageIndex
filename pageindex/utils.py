@@ -11,11 +11,10 @@ import asyncio
 import pymupdf
 from io import BytesIO
 from dotenv import load_dotenv
-load_dotenv()
-import logging
 import yaml
 from pathlib import Path
 from types import SimpleNamespace as config
+load_dotenv()
 
 CHATGPT_API_KEY = os.getenv("CHATGPT_API_KEY")
 

@@ -137,25 +137,85 @@ You can generate the PageIndex tree structure with this open-source repo, or use
 
 ---
 
-# ⚙️ Package Usage
+## ⚙️ Environment Setup
 
-You can follow these steps to generate a PageIndex tree from a PDF document.
+### 1. Create a Virtual Environment
 
-### 1. Install dependencies
-
-```bash
-pip3 install --upgrade -r requirements.txt
-```
-
-### 2. Set your OpenAI API key
-
-Create a `.env` file in the root directory and add your API key:
+It’s recommended to use a virtual environment to isolate dependencies:
 
 ```bash
-OPENAI_API_KEY=your_openai_key_here
+python3 -m venv .venv
+source .venv/bin/activate   # macOS / Linux
 ```
 
-### 3. Run PageIndex on your PDF
+For Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+---
+
+### 2. Install Dependencies
+
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env` file in the root directory and configure your LLM settings:
+
+### 🧠 Model Configuration
+
+```env
+LLM_MODEL="anthropic/claude-sonnet-4-6"
+```
+
+* This key allows you to **override the default model** defined in `config.yaml`
+* No need to modify source code when switching models
+
+---
+
+### 🔐 API Key Configuration (Provider-Based)
+
+Since this project uses LiteLLM, API key names must follow **provider-specific conventions**:
+
+#### OpenAI
+
+```env
+OPENAI_API_KEY=your_openai_key
+```
+
+#### Anthropic
+
+```env
+ANTHROPIC_API_KEY=your_anthropic_key
+```
+
+#### OpenRouter (example)
+
+```env
+OPENROUTER_API_KEY=your_openrouter_key
+```
+
+---
+
+### ⚠️ Important Notes
+
+* The **API key name must match the provider**
+* The **model name must align with the provider format**
+* LiteLLM automatically routes requests based on:
+
+  * Model name
+  * Available API keys
+
+---
+
+###  🚀 Run PageIndex on your PDF
 
 ```bash
 python3 run_pageindex.py --pdf_path /path/to/your/document.pdf

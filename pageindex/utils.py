@@ -677,4 +677,8 @@ class ConfigLoader:
 
         self._validate_keys(user_dict)
         merged = {**self._default_dict, **user_dict}
+        # Allow overriding the model via environment variable without touching config.yaml
+        env_model = os.getenv("LLM_MODEL")
+        if env_model and "model" not in user_dict:
+            merged["model"] = env_model
         return config(**merged)

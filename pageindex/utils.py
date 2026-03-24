@@ -16,10 +16,6 @@ import yaml
 from pathlib import Path
 from types import SimpleNamespace as config
 
-# Backward compatibility: support CHATGPT_API_KEY as alias for OPENAI_API_KEY
-if not os.getenv("OPENAI_API_KEY") and os.getenv("CHATGPT_API_KEY"):
-    os.environ["OPENAI_API_KEY"] = os.getenv("CHATGPT_API_KEY")
-
 litellm.drop_params = True
 
 def count_tokens(text, model=None):

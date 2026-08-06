@@ -1,0 +1,84 @@
+{
+  "doc_name": "medical.pdf",
+  "structure": [
+    {
+      "title": "PATIENT INFORMATION",
+      "start_index": 1,
+      "end_index": 1,
+      "node_id": "0000",
+      "summary": "This partial medical record documents a motor vehicle accident involving a 44-year-old male patient named James Alan Whitfield. The document contains comprehensive patient identification information including personal details, contact information, insurance coverage, and primary care physician. The main focus is an incident summary detailing a collision that occurred on October 3, 2024, where the patient's Honda Accord was struck by a Ford F-150 that ran a red light. The summary describes the mechanism of injury, vehicle damage, immediate symptoms reported by the patient (neck pain, left shoulder pain, headache, and dizziness), and emergency response including ambulance transport to the hospital emergency department."
+    },
+    {
+      "title": "INCIDENT SUMMARY",
+      "start_index": 1,
+      "end_index": 1,
+      "node_id": "0001",
+      "summary": "This partial medical record documents a motor vehicle accident involving a 44-year-old male patient named James Alan Whitfield. The document contains comprehensive patient identification information including personal details, contact information, insurance coverage, and primary care physician. The main focus is an incident summary detailing a collision that occurred on October 3, 2024, where the patient's Honda Accord was struck by a Ford F-150 that ran a red light. The summary describes the mechanism of injury, vehicle damage, immediate symptoms reported by the patient (neck pain, left shoulder pain, headache, and dizziness), and emergency response including ambulance transport to the hospital emergency department."
+    },
+    {
+      "title": "EMERGENCY DEPARTMENT VISIT",
+      "start_index": 2,
+      "end_index": 2,
+      "nodes": [
+        {
+          "title": "Chief Complaint",
+          "start_index": 2,
+          "end_index": 2,
+          "node_id": "0003",
+          "summary": "This partial emergency department document covers the initial assessment of a 44-year-old male patient following a motor vehicle collision. The main points include: the patient's presentation with multiple trauma-related symptoms (neck pain, left shoulder pain, headache, and dizziness); vital signs showing elevated blood pressure and heart rate likely due to pain and stress; detailed history of a T-bone collision where the patient was a belted driver with airbag deployment; specific symptoms including severe neck pain radiating to left shoulder, frontal headache, bilateral tinnitus, blurred vision, and chest wall pain from seatbelt contact; the patient's medical background of controlled hypertension and mild hypercholesterolemia with no prior spinal injuries; and documentation of his alert mental status despite brief post-impact confusion. The document appears to be cut off at the allergies section."
+        },
+        {
+          "title": "Triage Vitals",
+          "start_index": 2,
+          "end_index": 2,
+          "node_id": "0004",
+          "summary": "This partial emergency department document covers the initial assessment of a 44-year-old male patient following a motor vehicle collision. The main points include: the patient's presentation with multiple trauma-related symptoms (neck pain, left shoulder pain, headache, and dizziness); vital signs showing elevated blood pressure and heart rate likely due to pain and stress; detailed history of a T-bone collision where the patient was a belted driver with airbag deployment; specific symptoms including severe neck pain radiating to left shoulder, frontal headache, bilateral tinnitus, blurred vision, and chest wall pain from seatbelt contact; the patient's medical background of controlled hypertension and mild hypercholesterolemia with no prior spinal injuries; and documentation of his alert mental status despite brief post-impact confusion. The document appears to be cut off at the allergies section."
+        },
+        {
+          "title": "History of Present Illness",
+          "start_index": 2,
+          "end_index": 2,
+          "node_id": "0005",
+          "summary": "This partial emergency department document covers the initial assessment of a 44-year-old male patient following a motor vehicle collision. The main points include: the patient's presentation with multiple trauma-related symptoms (neck pain, left shoulder pain, headache, and dizziness); vital signs showing elevated blood pressure and heart rate likely due to pain and stress; detailed history of a T-bone collision where the patient was a belted driver with airbag deployment; specific symptoms including severe neck pain radiating to left shoulder, frontal headache, bilateral tinnitus, blurred vision, and chest wall pain from seatbelt contact; the patient's medical background of controlled hypertension and mild hypercholesterolemia with no prior spinal injuries; and documentation of his alert mental status despite brief post-impact confusion. The document appears to be cut off at the allergies section."
+        },
+        {
+          "title": "Past Medical History",
+          "start_index": 2,
+          "end_index": 2,
+          "node_id": "0006",
+          "summary": "This partial emergency department document covers the initial assessment of a 44-year-old male patient following a motor vehicle collision. The main points include: the patient's presentation with multiple trauma-related symptoms (neck pain, left shoulder pain, headache, and dizziness); vital signs showing elevated blood pressure and heart rate likely due to pain and stress; detailed history of a T-bone collision where the patient was a belted driver with airbag deployment; specific symptoms including severe neck pain radiating to left shoulder, frontal headache, bilateral tinnitus, blurred vision, and chest wall pain from seatbelt contact; the patient's medical background of controlled hypertension and mild hypercholesterolemia with no prior spinal injuries; and documentation of his alert mental status despite brief post-impact confusion. The document appears to be cut off at the allergies section."
+        },
+        {
+          "title": "Allergies",
+          "start_index": 2,
+          "end_index": 3,
+          "node_id": "0007",
+          "summary": "This partial emergency department document covers the initial evaluation of a 44-year-old male patient following a motor vehicle collision. The main points include:\n\n**Patient Presentation**: T-bone collision victim presenting with neck pain, left shoulder pain, headache, and dizziness, with elevated vital signs likely due to pain and anxiety.\n\n**Clinical History**: Details of the accident (belted driver, airbag deployment), brief post-impact confusion without loss of consciousness, and comprehensive symptom profile including severe neck pain radiating to left shoulder, frontal headache, bilateral tinnitus, blurred vision, and chest wall pain from seatbelt contact.\n\n**Medical Background**: Patient's history of well-controlled hypertension and mild hypercholesterolemia, with penicillin allergy noted and current lisinopril medication.\n\n**Physical Examination Findings**: Systematic assessment revealing cervical spine tenderness at C4-C6 levels with bilateral muscle spasm, seatbelt-related chest bruising and rib tenderness, left shoulder AC joint involvement, and neurological evaluation showing intact function with some left upper extremity weakness due to pain.\n\n**Diagnostic Results**: Cervical spine X-rays showing no acute fractures but evidence of muscle spasm-related straightening of normal curvature and pre-existing degenerative changes at C5-C6.\n\nThe document represents a thorough trauma evaluation focusing on potential cervical spine and associated injuries from the motor vehicle accident."
+        },
+        {
+          "title": "Current Medications",
+          "start_index": 3,
+          "end_index": 3,
+          "node_id": "0008",
+          "summary": "This partial medical document covers a physical examination and diagnostic findings for a patient with trauma-related injuries. The main points include:\n\n**Patient Status**: An alert but anxious male in moderate distress due to pain, with a penicillin allergy and currently taking Lisinopril.\n\n**Primary Injuries**: Evidence of motor vehicle accident trauma with seatbelt injuries, including:\n- Cervical spine injury with tenderness at C4-C6 levels, muscle spasms, and severely limited range of motion\n- Chest trauma with seatbelt ecchymosis and rib tenderness (left 4th-6th ribs)\n- Left shoulder injury affecting the AC joint and rotator cuff with decreased mobility\n\n**Physical Examination Findings**: Systematic assessment showing mild photophobia, tachycardia, reduced left upper extremity strength (4/5), but otherwise normal cardiovascular, abdominal, and neurological function.\n\n**Diagnostic Results**: Cervical spine X-rays revealing no acute fractures or dislocations, but showing muscle spasm-related straightening of normal cervical curvature and pre-existing degenerative changes at C5-C6.\n\nThe document indicates a trauma patient with multiple musculoskeletal injuries but no life-threatening complications based on the examination and initial imaging."
+        },
+        {
+          "title": "Physical Examination",
+          "start_index": 3,
+          "end_index": 3,
+          "node_id": "0009",
+          "summary": "This partial medical document covers a physical examination and diagnostic findings for a patient with trauma-related injuries. The main points include:\n\n**Patient Status**: An alert but anxious male in moderate distress due to pain, with a penicillin allergy and currently taking Lisinopril.\n\n**Primary Injuries**: Evidence of motor vehicle accident trauma with seatbelt injuries, including:\n- Cervical spine injury with tenderness at C4-C6 levels, muscle spasms, and severely limited range of motion\n- Chest trauma with seatbelt ecchymosis and rib tenderness (left 4th-6th ribs)\n- Left shoulder injury affecting the AC joint and rotator cuff with decreased mobility\n\n**Physical Examination Findings**: Systematic assessment showing mild photophobia, tachycardia, reduced left upper extremity strength (4/5), but otherwise normal cardiovascular, abdominal, and neurological function.\n\n**Diagnostic Results**: Cervical spine X-rays revealing no acute fractures or dislocations, but showing muscle spasm-related straightening of normal cervical curvature and pre-existing degenerative changes at C5-C6.\n\nThe document indicates a trauma patient with multiple musculoskeletal injuries but no life-threatening complications or acute fractures."
+        },
+        {
+          "title": "Diagnostic Studies",
+          "start_index": 3,
+          "end_index": 3,
+          "node_id": "0010",
+          "summary": "This partial medical document covers a physical examination and diagnostic findings for a patient with trauma-related injuries. The main points include:\n\n**Patient Status**: An alert but anxious male in moderate distress due to pain, with a penicillin allergy and currently taking Lisinopril.\n\n**Primary Injuries**: Evidence of motor vehicle accident trauma with seatbelt injuries, including:\n- Cervical spine injury with tenderness at C4-C6 levels, muscle spasms, and severely limited range of motion\n- Chest trauma with seatbelt ecchymosis and rib tenderness (left 4th-6th ribs)\n- Left shoulder injury affecting the AC joint and rotator cuff with decreased mobility\n\n**Physical Examination Findings**: Systematic assessment showing mild photophobia, tachycardia, reduced left upper extremity strength (4/5), but otherwise normal cardiovascular, abdominal, and neurological function.\n\n**Diagnostic Results**: Cervical spine X-rays revealing no acute fractures or dislocations, but showing muscle spasm-related straightening of normal cervical curvature and pre-existing degenerative changes at C5-C6.\n\nThe document indicates a trauma patient with multiple musculoskeletal injuries but no life-threatening complications or acute fractures."
+        }
+      ],
+      "node_id": "0002",
+      "summary": "This partial emergency department document covers the initial assessment of a 44-year-old male patient following a motor vehicle collision. The main points include: the patient's presentation with multiple trauma-related symptoms (neck pain, left shoulder pain, headache, and dizziness); vital signs showing elevated blood pressure and heart rate likely due to pain and stress; detailed history of a T-bone collision where the patient was a belted driver with airbag deployment; specific symptoms including severe neck pain radiating to left shoulder, frontal headache, bilateral tinnitus, blurred vision, and chest wall pain from seatbelt contact; the patient's medical background of controlled hypertension and mild hypercholesterolemia with no prior spinal injuries; and documentation of his alert mental status despite brief post-impact confusion. The document appears to be cut off at the allergies section."
+    }
+  ]
+}
